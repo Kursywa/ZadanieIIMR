@@ -137,19 +137,19 @@ bool check_if_1graph(int vertex_count, int matrix[VerticesMax][VerticesMax])
 }
 
 bool check_if_conjugated(int vertex_count , int matrix[VerticesMax][VerticesMax]){
-    for(int x = 0; x < vertex_count-1;x++) { 
-        for (int i = 1 + x; i < vertex_count - x; i++) {
+    for(int x = 0; x < vertex_count;x++) { 
+        for (int i = 1 + x; i < vertex_count; i++) {
             bool match = false;
             bool mismatch = false;
             for (int j = 0; j < vertex_count; j++) {
-                if (matrix[x][j] != matrix[i][j] && (matrix[x][j] == 1 || matrix[i][j] == 1)) {
+                if ((matrix[x][j] != matrix[i][j]) && (matrix[x][j] == 1 || matrix[i][j] == 1)) {
                     mismatch = true;
                 }
-                else if(matrix[x][j] == matrix[i][j] && matrix[x][j] == 1){
+                else if((matrix[x][j] == matrix[i][j]) && matrix[x][j] == 1){
                     match = true;
                 }
             }
-            if(match == mismatch){
+            if(match == true && mismatch == true){
                 return false;
             }
         }
@@ -162,15 +162,15 @@ bool check_if_linear(int vertex_count, int matrix[VerticesMax][VerticesMax]){
         for (int j = 0; j < vertex_count; j++) {
             for (int x = 0; x < vertex_count; x++) {
 
-                if (matrix[i][j] == matrix[i][x] == 1) {
+                if ((matrix[i][j] == matrix[i][x]) && matrix[i][j] == 1 && matrix[i][x] == 1 && (j != x)) {
                     for (int y = 0; y < vertex_count; y++) {
-                        if (matrix[j][y] == matrix[x][y] == 1) {
+                        if ((matrix[j][y] == matrix[x][y]) && matrix[j][y] == 1 && matrix[x][y] && (j != x)) {
                             return false;
                         }
                     }
                 }
                 if (matrix[i][i] == 1) {
-                    if ((matrix[i][j] == matrix[j][i] == 1) && (matrix[j][j] == 1)) {
+                    if ((matrix[i][j] == matrix[j][i]) && matrix[i][j] == 1 && matrix[j][i] == 1 && matrix[j][j] == 1 && (i != j)) {
                         return false;
                     }
                 }
