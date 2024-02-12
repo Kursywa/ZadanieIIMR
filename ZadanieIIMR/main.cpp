@@ -66,31 +66,6 @@ int main()
 		cout << "Graf nie jest liniowy" << endl;
 	}
 
-    //testing
-    /*cout << "wypisywanie consequents vectora" << endl;
-    for(int i=0;i<consequents.size();i++) {
-        cout << consequents[i] << endl;
-    }*/
-
-    /*for (int i = 0; i < main_vector.size(); i++) { //rzedy
-        for (int j = 0; j < main_vector[i].size(); j++) //kolumny
-            cout << main_vector[i][j] << " ";
-        cout << endl;
-    }*/
-    //for (int i = 0; i < VerticesMax; i++) {
-    //    for (int j = 0; j < VerticesMax; j++) {
-    //        matrix[i][j] = 0;
-    //        /*cout << matrix[i][j];*/
-    //    }
-    //    /*cout << endl;*/
-    //}
-
-    /*for (int i = 0; i < vertex_count; i++) {
-        for (int j = 0; j < vertex_count; j++) {
-            cout << matrix[i][j];
-        }
-        cout << endl;
-    }*/
 return 0;
 }
 
@@ -162,20 +137,20 @@ bool check_if_1graph(int vertex_count, int matrix[VerticesMax][VerticesMax])
 }
 
 bool check_if_conjugated(int vertex_count , int matrix[VerticesMax][VerticesMax]){
-    for(int x = 0; x < vertex_count-1;x++) { //po jednym rzędzie w tablicy
-        for (int i = 1 + x; i < vertex_count - x; i++) { // porównujemy inny rząd
+    for(int x = 0; x < vertex_count-1;x++) { 
+        for (int i = 1 + x; i < vertex_count - x; i++) {
             bool match = false;
             bool mismatch = false;
-            for (int j = 0; j < vertex_count; j++) { // porównujemy ich poszczególne elementy
+            for (int j = 0; j < vertex_count; j++) {
                 if (matrix[x][j] != matrix[i][j] && (matrix[x][j] == 1 || matrix[i][j] == 1)) {
-                    mismatch = true; //oba rzędy mają przynajmniej jeden różny następnik
+                    mismatch = true;
                 }
                 else if(matrix[x][j] == matrix[i][j] && matrix[x][j] == 1){
-                    match = true; // oba rzędy mają przynajmniej jeden wspólny nastepnik
+                    match = true;
                 }
             }
             if(match == mismatch){
-                return false; // jezeli oba rzedy maja jakies nastepniki, ktore sa takie same i takie, ktore sa rozne
+                return false;
             }
         }
     }
@@ -183,35 +158,36 @@ bool check_if_conjugated(int vertex_count , int matrix[VerticesMax][VerticesMax]
 }
 
 bool check_if_linear(int vertex_count, int matrix[VerticesMax][VerticesMax]){
+    for (int i = 0; i < vertex_count; i++) {
+        for (int j = 0; j < vertex_count; j++) {
+            for (int x = 0; x < vertex_count; x++) {
 
-    for(int x = 0; x < vertex_count;x++) {
-        for (int i = x + 1; i < vertex_count - x; i++) { 
-            bool whole_matching = true;
-            for (int j = 0; j < vertex_count; j++) { 
-                if (matrix[x][j] != matrix[i][j] && (matrix[x][j] == 1 || matrix[i][j] == 1)) {
-                    whole_matching = false;
+                if (matrix[i][j] == matrix[i][x] == 1) {
+                    for (int y = 0; y < vertex_count; y++) {
+                        if (matrix[j][y] == matrix[x][y] == 1) {
+                            return false;
+                        }
+                    }
                 }
-            }
-            if(whole_matching){ 
-                for (int j = 0; j < vertex_count; j++) { 
-                    if (i != x && (matrix[j][i] == 1 && matrix[j][i] == matrix[j][x])) {
-                        return false; 
+                if (matrix[i][i] == 1) {
+                    if ((matrix[i][j] == matrix[j][i] == 1) && (matrix[j][j] == 1)) {
+                        return false;
                     }
                 }
             }
         }
+
     }
-return true;
+    return true;
 }
 
 void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][VerticesMax], string filename) {
     int counter = 1;
     int tab_input = 0;
 
-    // macierz przetransformowanych wierzcholkow na luki | zerwoy indeks to numer wierzcholka dla pomocy
     vector<array<int, TransValue> > tab(vertex_count);
 
-    for (int i = 0; i < vertex_count; i++) {// wyzerowanie nowo powstalej macierzy
+    for (int i = 0; i < vertex_count; i++) {
         for (int j = 0; j < TransValue; j++) {
             tab[i][j] = 0;
         }
@@ -222,12 +198,7 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
             tab[i][j] = counter++;
         }
     }
-    /*cout << "Transformed graph in array: " << endl;
-    for (int i = 0; i < vertex_count; i++) {
-        cout << tab[i][0] << "\t" << tab[i][1] << " -> " << tab[i][2] << endl;
-    }*/
 
-    // transforming vertices to links via finding egligible matrix positions
     tab_input = 0;
     for (int i = 0; i < vertex_count; i++) {
 
@@ -251,33 +222,28 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
     {
         cout << tab[i][0] << "\t" << tab[i][1] << " -> " << tab[i][2] << endl;
     }
-    //trying to get homogenous array with minimal index of vertices
+
     vector<array<int, 2> > tab_homogenesis(vertex_count);
     int minify_vertices = 0;
     int helper_variable;
 
-
-
-    // making a temporarty table and zeroing it
     for (int i = 0; i < vertex_count; i++) {
         for (int j = 0; j < 2; j++) {
             tab_homogenesis[i][j] = tab[i][j + 1];
             tab_homogenesis[i][j] += 50;
-            //cout << tab[i][j] << endl;
         }
     }
     cout << endl;
-    for (int i = 0; i < vertex_count; i++) { //dla kazdego rzedu
-        for (int j = 0; j < 2; j++) { //w kazdej kolumnie
+    for (int i = 0; i < vertex_count; i++) { 
+        for (int j = 0; j < 2; j++) { 
             if (tab_homogenesis[i][j] > minify_vertices) {
-                helper_variable = tab_homogenesis[i][j]; // przypisz wartosc z tej komorki pomocniczej zmienne
+                helper_variable = tab_homogenesis[i][j]; 
                 minify_vertices++;
-                for (int x = 0; x < vertex_count; x++) { // dla kazdego rzedu
-                    for (int y = 0; y < 2; y++) { // w kazdej kolumnie
+                for (int x = 0; x < vertex_count; x++) { 
+                    for (int y = 0; y < 2; y++) {
                         if (tab_homogenesis[x][y] ==
-                            helper_variable) { // sprawdz czy wartosc z pomocniczej zmiennej jest rowna danemu wierzcholkowi
-                            tab_homogenesis[x][y] = minify_vertices; // jesli tak, to wpisz w nowej tabeli najmniejsz
-                            // dostepna wartosc zamiast tej pierowtnej
+                            helper_variable) { 
+                            tab_homogenesis[x][y] = minify_vertices; 
                         }
                     }
                 }
@@ -285,15 +251,16 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
         }
 
     }
+    //testing
     cout << endl << "Homogenous transformed original graph vertices" << endl; // wypisywanie
     for (int i = 0; i < vertex_count; i++) {
         cout << i + 1 << "  " << tab_homogenesis[i][0] << " -> " << tab_homogenesis[i][1] << endl;
     }
-    // sorting the the output of original graph
+
     int original_vertex_max_count = 0;
     int countt = 0;
     int counter_x = 0;
-    for (int i = 0; i < vertex_count; i++) { //liczymy ilosc wierzchokow w grafie oryginalnym
+    for (int i = 0; i < vertex_count; i++) { 
         for (int j = 0; j < 2; j++) {
             if (tab_homogenesis[i][j] > original_vertex_max_count) {
                 original_vertex_max_count = tab_homogenesis[i][j];
@@ -312,7 +279,7 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
         }
 
         // writing to file
-        filename = "T" + filename; //plik do zapisu bedzie mial taka sama nazwe co oryginalny z dopisanieT na poczatku nazwy
+        filename = "T" + filename;
         ofstream out;
         out.open(filename.c_str());
         counter = 0;
