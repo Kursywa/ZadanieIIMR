@@ -184,8 +184,8 @@ bool check_if_conjugated(int vertex_count , int matrix[VerticesMax][VerticesMax]
 
 bool check_if_linear(int vertex_count, int matrix[VerticesMax][VerticesMax]){
 
-    for(int x = 0; x < vertex_count-1;x++) {
-        for (int i = 1 + x; i < vertex_count - x; i++) { 
+    for(int x = 0; x < vertex_count;x++) {
+        for (int i = x + 1; i < vertex_count - x; i++) { 
             bool whole_matching = true;
             for (int j = 0; j < vertex_count; j++) { 
                 if (matrix[x][j] != matrix[i][j] && (matrix[x][j] == 1 || matrix[i][j] == 1)) {
@@ -287,7 +287,7 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
     }
     cout << endl << "Homogenous transformed original graph vertices" << endl; // wypisywanie
     for (int i = 0; i < vertex_count; i++) {
-        cout << i << "  " << tab_homogenesis[i][0] << " -> " << tab_homogenesis[i][1] << endl;
+        cout << i + 1 << "  " << tab_homogenesis[i][0] << " -> " << tab_homogenesis[i][1] << endl;
     }
     // sorting the the output of original graph
     int original_vertex_max_count = 0;
@@ -299,13 +299,14 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
                 original_vertex_max_count = tab_homogenesis[i][j];
             }
         }
-
+    }
         int matrixxer[VerticesMax][VerticesMax];
         for (auto& i : matrixxer) {
             for (int& j : i) {
                 j = 0;
             }
         }
+    
     for(int i = 0; i < vertex_count; i++){
             matrixxer[tab_homogenesis[i][0]-1][tab_homogenesis[i][1]-1]++;
         }
@@ -331,8 +332,6 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
                 counter++;
             }
         }
-        
-    }
     print_results(filename);
 }
 
