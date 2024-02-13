@@ -216,12 +216,12 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
         }
 
     }
-
-    cout << endl << "transformed vertex to links" << endl;
+    // output
+    /*cout << endl << "transformed vertex to links" << endl;
     for (int i = 0; i < vertex_count; i++)
     {
         cout << tab[i][0] << "\t" << tab[i][1] << " -> " << tab[i][2] << endl;
-    }
+    }*/
 
     vector<array<int, 2> > tab_homogenesis(vertex_count);
     int minify_vertices = 0;
@@ -251,11 +251,11 @@ void transformation_of_matrix(const int vertex_count, int matrix[VerticesMax][Ve
         }
 
     }
-    //testing
-    cout << endl << "Homogenous transformed original graph vertices" << endl; // wypisywanie
-    for (int i = 0; i < vertex_count; i++) {
-        cout << i + 1 << "  " << tab_homogenesis[i][0] << " -> " << tab_homogenesis[i][1] << endl;
-    }
+    // output
+    //cout << endl << "Homogenous transformed original graph vertices" << endl; // wypisywanie
+    //for (int i = 0; i < vertex_count; i++) {
+    //    cout << i + 1 << "  " << tab_homogenesis[i][0] << " -> " << tab_homogenesis[i][1] << endl;
+    //}
 
     int original_vertex_max_count = 0;
     int countt = 0;
